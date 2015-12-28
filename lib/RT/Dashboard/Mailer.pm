@@ -128,13 +128,24 @@ sub MailDashboards {
                 }
             }
 
+            my $lang;
+            if ($lang = $subscription->SubValue('Language')) {
+                $RT::Logger->debug("Using subscription's preferred language $lang");
+            }
+            elsif ($lang = RT->Config->Get('EmailDashboardLanguage')) {
+                $RT::Logger->debug("Using RT's preferred language $lang");
+            }
+            else {
+                $RT::Logger->debug("Using each user's preferred language");
+            }
+
             my $email_success = 0;
             for my $email (uniq @emails) {
                 eval {
                     my $currentuser = RT::CurrentUser->new;
                     $currentuser->LoadByEmail($email);
 
-                    if (my $lang = $subscription->SubValue('Language')) {
+                    if ($lang) {
                         $currentuser->{'LangHandle'} = RT::I18N->get_handle($lang);
                     }
 
@@ -376,6 +387,8 @@ sub EmailDashboard {
         RT->Config->Get('rtname'),
         $currentuser->loc($frequency_display),
         $dashboard->Name;
+
+    $RT::Logger->debug("Localized subject: $subject");
 
     my $entity = $self->BuildEmail(
         %args,

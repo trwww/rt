@@ -760,6 +760,17 @@ mailed dashboards.
 
 Set(@EmailDashboardRemove, ());
 
+=item C<$EmailDashboardLanguage>
+
+Lets you set the default language for dashboard emails. Individual
+subscriptions can override this value by explicitly selecting a language on the
+dashboard subscribe page. If this config has no value (the default), then each
+recipient's configured language will be used.
+
+=cut
+
+# Set($EmailDashboardLanguage, "fr");
+
 =back
 
 
