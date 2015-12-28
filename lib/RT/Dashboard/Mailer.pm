@@ -91,9 +91,6 @@ sub MailDashboards {
         $hour .= ':00';
         $RT::Logger->debug("Checking ".$user->Name."'s subscriptions: hour $hour, dow $dow, dom $dom");
 
-        my $currentuser = RT::CurrentUser->new;
-        $currentuser->LoadByName($user->Name);
-
         # look through this user's subscriptions, are any supposed to be generated
         # right now?
         for my $subscription ($user->Attributes->Named('Subscription')) {
@@ -134,6 +131,13 @@ sub MailDashboards {
             my $email_success = 0;
             for my $email (uniq @emails) {
                 eval {
+                    my $currentuser = RT::CurrentUser->new;
+                    $currentuser->LoadByEmail($email);
+
+                    if (my $lang = $subscription->SubValue('Language')) {
+                        $currentuser->{'LangHandle'} = RT::I18N->get_handle($lang);
+                    }
+
                     $self->SendDashboard(
                         %args,
                         CurrentUser  => $currentuser,

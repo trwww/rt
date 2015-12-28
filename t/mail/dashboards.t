@@ -342,7 +342,7 @@ $bad_time = $good_time - 86400; # day before (i.e. different month)
 
 produces_dashboard_mail_ok(
     Time       => $good_time,
-    Subject    => "[example.com] a Monthly b Testing! c\n",
+    Subject    => "[example.com] a Mensuel b Testing! c\n",
     BodyLike   => qr/Mes tableaux de bord/,
     BodyUnlike => qr/My dashboards/,
 );
