@@ -293,6 +293,10 @@ sub PushBasics {
         $self->PushCollections(qw(Topics Classes));
     }
 
+    if ($self->{FollowTickets}) {
+        $self->PushCollections(qw(Tickets));
+    }
+
     $self->PushCollections(qw(Queues));
 }
 
